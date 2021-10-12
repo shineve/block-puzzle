@@ -1,8 +1,30 @@
 <template>
   <div class="grid-container">
-    <div class="grid-cell" v-for="(cell, index) in 16" :key="index"></div>
+    <div
+      v-for="(cell, index) in totalCells"
+      :key="index"
+      class="grid-cell"
+    />
   </div>
 </template>
+
+<script lang="ts">
+import { ref } from 'vue';
+export default {
+  props: {
+    tileCountPerRowOrColumn: {
+      type: Number,
+      default: 4,
+    },
+  },
+  setup(props) {
+    const totalCells = ref(props.tileCountPerRowOrColumn * props.tileCountPerRowOrColumn);
+    return {
+      totalCells,
+    };
+  },
+};
+</script>
 
 <style scoped>
 .grid-container {
@@ -13,7 +35,9 @@
 
 .grid-cell {
   @apply rounded m-2 bg-white bg-opacity-30;
-  width: calc(var(--pixel-size) * 12.5);
-  height: calc(var(--pixel-size) * 12.5);
+  width: calc(25% - 1rem);
+  height: calc(25% - 1rem);
+  /* width: calc(var(--pixel-size) * 12.5); */
+  /* height: calc(var(--pixel-size) * 12.5); */
 }
 </style>

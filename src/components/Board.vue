@@ -1,13 +1,15 @@
 <template>
-  <div class="board">
+  <div class="board" id="board">
     <div class="tile-container">
-      <Tile></Tile>
+      <Tile v-for="tile in tiles" :key="tile.id" v-bind="tile"></Tile>
     </div>
-    <Grid></Grid>
+    <Grid :tileCountPerRowOrColumn="tileCountPerRowOrColumn"></Grid>
   </div>
 </template>
 
 <script lang="ts">
+import { PropType } from 'vue';
+import { TileMeta } from '@/types/Tile';
 import Grid from '@/components/Grid.vue';
 import Tile from '@/components/Tile.vue';
 export default {
@@ -16,7 +18,12 @@ export default {
     Tile,
   },
   props: {
-    tileCountPerRow: {
+    tiles: {
+      type: Object as PropType<TileMeta[]>,
+      default: [],
+      required: true,
+    },
+    tileCountPerRowOrColumn: {
       type: Number,
       default: 4,
     },
@@ -26,9 +33,7 @@ export default {
 
 <style scoped>
 .board {
-  @apply relative overflow-hidden rounded-md;
-  width: 480px;
-  height: 480px;
+  @apply relative overflow-hidden rounded-md aspect-w-1	aspect-h-1 w-full;
 }
 
 .tile-container {

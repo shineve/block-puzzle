@@ -22,5 +22,5 @@ module.exports = {
       borderWidth: ['first', 'last'],
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/aspect-ratio')],
 };

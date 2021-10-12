@@ -1,8 +1,12 @@
 <template>
-  <div class="App h-full mx-auto">
-    <div class="container flex flex-col items-center justify-center px-4 h-full bg-blue-50">
-      <Game></Game>
-    </div>
+  <div class="App h-full mx-auto container flex flex-col items-center justify-center bg-blue-50">
+    <header />
+    <main class="flex flex-col items-center justify-center px-4 w-full h-full bg-blue-50">
+      <div class="game-container">
+        <Game />
+      </div>
+    </main>
+    <footer />
   </div>
 </template>
 
@@ -16,8 +20,10 @@ export default {
 };
 </script>
 
-<style>
-:root {
-  --pixel-size: 8px;
+<style scoped>
+.game-container {
+  @apply h-full w-full;
+  max-width: 480px;
+  max-height: 480px;
 }
 </style>
