@@ -6,6 +6,7 @@
 
 <script lang="ts">
 import { ref, toRefs, computed, PropType, onMounted, watch } from 'vue';
+import { useStore } from 'vuex';
 import { TileMeta } from '@/types/Tile';
 export default {
   name: 'Tile',
@@ -24,6 +25,7 @@ export default {
     },
   },
   setup(props: TileMeta) {
+    const store = useStore();
     let scale = ref(1);
     let documentWidth = ref(0);
     let rem = ref(16);
@@ -39,9 +41,7 @@ export default {
     );
 
     onMounted(() => {
-      documentWidth = (document.querySelector('#board')?.getClientRects()[0].width - 16).toFixed(2);
-      rem.value = parseInt(window.getComputedStyle(document.documentElement)['font-size']);
-      size.value = documentWidth * 0.25 - rem.value + 'px';
+      animateTile();
     });
 
     const animateTile = () => {
@@ -52,15 +52,13 @@ export default {
     };
 
     const positionToPixels = (position: number) => {
-      return (position / 4) * documentWidth;
+      return (position / 4) * store.getters['env/boardSize'];
     };
 
     const tileStyle = computed(() => {
       return {
-        width: size.value,
-        height: size.value,
-        top: positionToPixels(props.position[1]) + 'px',
         left: positionToPixels(props.position[0]) + 'px',
+        top: positionToPixels(props.position[1]) + 'px',
         transform: `scale(${scale.value})`,
         zIndex: props.id,
       };
@@ -68,6 +66,7 @@ export default {
 
     return {
       tileStyle,
+      position: props.position,
     };
   },
 };
@@ -82,8 +81,10 @@ export default {
    */
   @apply m-2 absolute rounded font-bold text-center flex items-center justify-center text-4xl;
   /* position: absolute; */
-  /* width: calc(25% - 1rem);
-  height: calc(25% - 1rem); */
+  /* left: calc(attr(data-position-x) / 4 * 100%);
+  top: calc(attr(data-position-y) / 4 * 100%); */
+  width: var(--tile-size);
+  height: var(--tile-size);
   /* width: calc(var(--pixel-size) * 12.5);
   height: calc(var(--pixel-size) * 12.5); */
   /* margin: 0.5rem; */

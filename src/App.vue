@@ -11,11 +11,29 @@
 </template>
 
 <script lang="ts">
+import { onMounted, onBeforeUnmount } from 'vue';
+import { useStore } from 'vuex';
 import Game from '@/components/Game.vue';
 
 export default {
   components: {
     Game,
+  },
+  setup() {
+    const store = useStore();
+
+    const onWindowResize = () => {
+      store.dispatch('env/getBoardSize');
+    };
+
+    onMounted(() => {
+      store.dispatch('env/getBoardSize');
+      window.addEventListener('resize', onWindowResize);
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', onWindowResize);
+    });
   },
 };
 </script>

@@ -37,6 +37,17 @@ export default {
 }
 
 .tile-container {
+  --tile-container-size: calc(100% - 1rem);
+  
   @apply absolute z-10 inset-0 m-2;
+
+  width: var(--tile-container-size);
+  height: var(--tile-container-size);
+}
+</style>
+
+<style>
+.tile-container {
+  --tile-size: calc(25% - 1rem);
 }
 </style>

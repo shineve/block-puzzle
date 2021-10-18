@@ -34,9 +34,10 @@ export default {
 }
 
 .grid-cell {
+  --tile-size: calc(25% - 1rem);
   @apply rounded m-2 bg-white bg-opacity-30;
-  width: calc(25% - 1rem);
-  height: calc(25% - 1rem);
+  width: var(--tile-size);
+  height: var(--tile-size);
   /* width: calc(var(--pixel-size) * 12.5); */
   /* height: calc(var(--pixel-size) * 12.5); */
 }
