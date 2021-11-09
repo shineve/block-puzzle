@@ -8,8 +8,10 @@
   },
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.3.0",
+    "firebase": "^9.1.3",
     "lodash": "^4.17.21",
     "vue": "^3.2.13",
+    "vue-router": "^4.0.12",
     "vuex": "^4.0.2"
   },
   "devDependencies": {

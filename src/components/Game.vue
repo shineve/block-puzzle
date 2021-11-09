@@ -4,11 +4,11 @@
 
 <script lang="ts">
 import { ref, reactive, onUpdated, onBeforeUnmount, onMounted, computed } from 'vue';
+import { useStore } from 'vuex';
 import { TileMeta, ActionMeta } from '@/types/Tile';
 import { tileCountPerRowOrColumn as tileCount, animationDuration } from '@/config';
 import Board from '@/components/Board.vue';
-import { useIds } from '@/lib/game/id';
-import { throttle } from 'lodash';
+import { throttle, cloneDeep } from 'lodash';
 
 type StateMeta = {
   tiles: {
@@ -17,6 +17,7 @@ type StateMeta = {
   inMotion: boolean;
   hasChanged: boolean;
   byIds: number[];
+  lastId: number;
 };
 
 type RetrieveTileIdsPerRowOrColumn = (rowOrColumnIndex: number) => number[];
@@ -33,6 +34,7 @@ const initialState: StateMeta = {
   byIds: [],
   hasChanged: false,
   inMotion: false,
+  lastId: 0,
 };
 
 const actionHandler = (state: StateMeta, action: ActionMeta) => {
@@ -96,20 +98,27 @@ export default {
     Board,
   },
   setup() {
-    let isInitialRender = true;
+    const store = useStore();
     let count = 0;
     let lastGeneratedCount = 0;
     let tileCountPerRowOrColumn = ref(tileCount);
+    let isInitialRender = true;
+    let initialValue = initialState;
 
-    let state: StateMeta = reactive(initialState);
+    if (localStorage.getItem('game')) {
+      Object.assign(initialValue, JSON.parse(localStorage.getItem('game')));
+      isInitialRender = false;
+    }
+
+    let state: StateMeta = reactive(initialValue);
     let tileList = computed(() => {
       return state.byIds.map(tileId => state.tiles[tileId]);
     });
 
     const createTile = ({ position, value }: Partial<TileMeta>) => {
-      const [nextId] = useIds();
+      state.lastId++;
       const tile = {
-        id: nextId(),
+        id: state.lastId,
         position,
         value,
       } as TileMeta;
@@ -211,8 +220,10 @@ export default {
       return hasXChanged || hasYChanged;
     };
 
-    const generateRandomTile = (value: number = 2) => {
+    const generateRandomTile = () => {
+      let value: number = 2;
       const emptyTiles = findEmptyTiles();
+      const currentLargestValue = findLargestTile();
 
       if (emptyTiles.length > 0) {
         const index = Math.floor(Math.random() * emptyTiles.length);
@@ -244,6 +255,17 @@ export default {
       });
 
       return tileMap;
+    };
+
+    const findLargestTile = () => {
+      let largest = 2;
+
+      Object.values(state.tiles).forEach(tile => {
+        if (tile.value > largest) {
+          largest = tile.value;
+        }
+      });
+      return largest;
     };
 
     const findEmptyTiles = () => {
@@ -373,21 +395,17 @@ export default {
       return move.bind(this, retrieveTileIdsByColumn, calculateFirstFreeIndex);
     };
 
-    if (isInitialRender) {
-      // generateRandomTile();
-      // generateRandomTile();
-      createTile({ position: [0, 0], value: 2 });
-      // createTile({ position: [1, 0], value: 16 });
-      // createTile({ position: [2, 0], value: 128 });
-      // createTile({ position: [3, 0], value: 1024 });
-      isInitialRender = false;
-    }
+    const updateCache = () => {
+      const { tiles, byIds, lastId } = state;
+      localStorage.setItem('game', JSON.stringify({ tiles, byIds, lastId }));
+    };
 
     onUpdated(() => {
       setTimeout(() => {
         if (!state.inMotion && state.hasChanged && lastGeneratedCount !== count) {
           lastGeneratedCount = count;
           generateRandomTile();
+          updateCache();
         }
       }, animationDuration);
     });
@@ -439,6 +457,12 @@ export default {
     };
 
     onMounted(() => {
+      if (isInitialRender) {
+        generateRandomTile();
+        generateRandomTile();
+        isInitialRender = false;
+      }
+
       window.addEventListener(
         'keydown',
         throttle(handleKeyDown, animationDuration, { leading: true, trailing: false }),

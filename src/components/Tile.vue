@@ -52,7 +52,7 @@ export default {
     };
 
     const positionToPixels = (position: number) => {
-      return (position / 4) * store.getters['env/boardSize'];
+      return (position / 4) * store.getters['boardSize'];
     };
 
     const tileStyle = computed(() => {
