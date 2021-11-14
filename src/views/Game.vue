@@ -1,7 +1,5 @@
 <template>
-  <div class="game-container">
-    <Game />
-  </div>
+  <Game />
 </template>
 
 <script lang="ts">
@@ -12,11 +10,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.game-container {
-  @apply h-full w-full;
-  max-width: 480px;
-  max-height: 480px;
-}
-</style>
