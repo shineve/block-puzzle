@@ -3,7 +3,7 @@ import App from './App.vue';
 // @ts-ignore
 import store from './store';
 
-import '@/lib/SwipedEvents.js';
+import '@/lib/swipedEvents.js';
 import '@/assets/styles/index.css';
 
 const app = createApp(App);
