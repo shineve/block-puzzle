@@ -8,11 +8,12 @@
 </template>
 
 <script lang="ts">
-import { PropType } from 'vue';
+import { PropType, defineComponent } from 'vue';
 import { TileMeta } from '@/types/Tile';
 import Grid from '@/components/Grid.vue';
 import Tile from '@/components/Tile.vue';
-export default {
+
+export default defineComponent({
   components: {
     Grid,
     Tile,
@@ -28,7 +29,7 @@ export default {
       default: 4,
     },
   },
-};
+});
 </script>
 
 <style scoped>
@@ -38,7 +39,7 @@ export default {
 
 .tile-container {
   --tile-container-size: calc(100% - 1rem);
-  
+
   @apply absolute z-10 inset-0 m-2;
 
   width: var(--tile-container-size);

@@ -14,5 +14,5 @@
       "@/*": ["./src/*"],
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/lib/swipedEvents.js"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/lib/swipedEvents.js", "src/store/index.js", "src/store/modules/env.js"]
 }

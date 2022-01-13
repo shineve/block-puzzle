@@ -5,10 +5,10 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs, computed, PropType, onMounted, watch } from 'vue';
+import { ref, toRefs, computed, PropType, onMounted, watch, defineComponent } from 'vue';
 import { useStore } from 'vuex';
 import { TileMeta } from '@/types/Tile';
-export default {
+export default defineComponent({
   name: 'Tile',
   props: {
     position: {
@@ -69,7 +69,7 @@ export default {
       position: props.position,
     };
   },
-};
+});
 </script>
 
 <style scoped>

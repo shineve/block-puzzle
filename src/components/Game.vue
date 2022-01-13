@@ -1,5 +1,5 @@
 <template>
-  <Board :tiles="tileList" :tile-count-per-row-or-column="tileCountPerRowOrColumn.value"></Board>
+  <Board :tiles="tileList" :tile-count-per-row-or-column="tileCountPerRowOrColumn"></Board>
 </template>
 
 <script lang="ts">
@@ -105,8 +105,9 @@ export default {
     let isInitialRender = true;
     let initialValue = initialState;
 
-    if (localStorage.getItem('game')) {
-      Object.assign(initialValue, JSON.parse(localStorage.getItem('game')));
+    const localCache: string = localStorage.getItem('game') || '';
+    if (localCache) {
+      Object.assign(initialValue, JSON.parse(localCache));
       isInitialRender = false;
     }
 
@@ -435,7 +436,7 @@ export default {
       }
     };
 
-    const handleTouchEvent = function (e: TouchEvent) {
+    const handleTouchEvent = function (e: CustomEvent) {
       count++;
       e.preventDefault();
       const eventType = e.detail.dir;
@@ -468,9 +469,13 @@ export default {
         throttle(handleKeyDown, animationDuration, { leading: true, trailing: false }),
       );
 
+      // @ts-ignore
       document.addEventListener(
         'swiped',
-        throttle(handleTouchEvent, animationDuration, { leading: true, trailing: false }),
+        throttle(handleTouchEvent, animationDuration, {
+          leading: true,
+          trailing: false,
+        }),
       );
     });
 
@@ -480,9 +485,13 @@ export default {
         throttle(handleKeyDown, animationDuration, { leading: true, trailing: false }),
       );
 
+      // @ts-ignore
       document.removeEventListener(
         'swiped',
-        throttle(handleTouchEvent, animationDuration, { leading: true, trailing: false }),
+        throttle(handleTouchEvent, animationDuration, {
+          leading: true,
+          trailing: false,
+        }),
       );
     });
 

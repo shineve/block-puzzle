@@ -9,8 +9,8 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
-export default {
+import { ref, defineComponent } from 'vue';
+export default defineComponent({
   props: {
     tileCountPerRowOrColumn: {
       type: Number,
@@ -23,7 +23,7 @@ export default {
       totalCells,
     };
   },
-};
+});
 </script>
 
 <style scoped>

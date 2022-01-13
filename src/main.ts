@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import App from './App.vue';
+// @ts-ignore
 import store from './store';
 
 import '@/lib/SwipedEvents.js';
